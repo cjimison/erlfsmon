@@ -23,7 +23,11 @@ start_link(Backend, Path, Cwd) ->
 %% ------------------------------------------------------------------
 
 init([Backend, Path, Cwd]) ->
-    Port = Backend:start_port(Path, Cwd),
+    Port = 
+    case file:read_file_info(Path) of
+        {ok, _} -> Backend:start_port(Path, Cwd);
+        _       -> undefined
+    end,
     {ok, #state{
             port=Port,
             path=Path,

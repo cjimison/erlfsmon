@@ -1,5 +1,9 @@
 -module(erlfsmon).
--export([subscribe/0, known_events/0, path/0, start_logger/0]).
+-export([subscribe/0,subscribe/1, known_events/0, path/0, start_logger/0]).
+
+subscribe(Path) ->
+    application:set_env(erlfsmon, path, Path),
+    subscribe().
 
 subscribe() ->
     gen_event:add_sup_handler(erlfsmon_events, {erlfsmon_event_bridge, self()}, [self()]).
